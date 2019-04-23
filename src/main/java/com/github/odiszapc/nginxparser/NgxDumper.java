@@ -26,7 +26,7 @@ public class NgxDumper
 
     private NgxConfig config;
     private final static int PAD_SIZE = 2;
-    private final static String PAD_SYMBOL = "  ";
+    private final static String PAD_SYMBOL = "    ";
     private final static String LBRACE = "{";
     private final static String RBRACE = "}";
     public final static String LF = "\n";

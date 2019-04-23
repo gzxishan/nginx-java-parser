@@ -38,8 +38,8 @@ public class DumperTest {
                 "error_log /var/log/nginx/error.log warn;\n" +
                 "pid /var/run/nginx.pid;\n" +
                 "events {\n" +
-                "  worker_connections 2048;\n" +
-                "  use epoll;\n" +
+                "    worker_connections 2048;\n" +
+                "    use epoll;\n" +
                 "}\n";
         Assert.assertEquals(TestUtils.dump("common/c2.conf"), expected);
     }

@@ -17,8 +17,8 @@ public class AlterConfigTest extends ParseTestBase {
 
         final String expected = "" +
                 "http {\n" +
-                "  server {\n" +
-                "  }\n" +
+                "    server {\n" +
+                "    }\n" +
                 "}\n";
 
         assertEquals(new NgxDumper(conf).dump(), expected);
@@ -34,8 +34,8 @@ public class AlterConfigTest extends ParseTestBase {
 
         final String expected = "" +
                 "http {\n" +
-                "  server {\n" +
-                "  }\n" +
+                "    server {\n" +
+                "    }\n" +
                 "}\n";
 
         assertEquals(new NgxDumper(conf).dump(), expected);

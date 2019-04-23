@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.github.odiszapc.nginxparser.TestUtils.assertBlock;
 import static com.github.odiszapc.nginxparser.TestUtils.assertParam;
@@ -29,10 +30,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-public class NestedTest extends ParseTestBase {
+public class NestedTest extends ParseTestBase
+{
 
     @Test
-    public void testС1() throws Exception {
+    public void testС1() throws Exception
+    {
         Iterator<NgxEntry> it = parse("nested/c1.conf").getEntries().iterator();
         NgxBlock rtmp = assertBlock(it.next(), "rtmp");
 
@@ -55,9 +58,10 @@ public class NestedTest extends ParseTestBase {
     }
 
     @Test
-    public void testC1find() throws Exception {
+    public void testC1find() throws Exception
+    {
         NgxConfig conf = parse("nested/c1.conf");
-        List<NgxEntry> result = conf.findAll(NgxConfig.PARAM, "rtmp", "server", "application", "live");
+        List<NgxParam> result = conf.findAll(NgxConfig.PARAM, "rtmp", "server", "application", "live");
         assertEquals(result.size(), 2);
         assertParam(result.get(0), "live", "on");
         assertParam(result.get(1), "live", "off");
@@ -65,13 +69,14 @@ public class NestedTest extends ParseTestBase {
     }
 
     @Test
-    public void testC1findEvery() throws Exception {
+    public void testC1findEvery() throws Exception
+    {
         NgxConfig conf = parse("nested/c1.conf");
         NgxBlock rtmp = conf.findBlock("rtmp");
         assertBlock(rtmp, "rtmp");
 
-        List<NgxEntry> all = conf.findAll(NgxConfig.BLOCK, "rtmp", "server");
-        Iterator<NgxEntry> it = all.iterator();
+        List<NgxBlock> all = conf.findAll(NgxConfig.BLOCK, "rtmp", "server");
+        Iterator<NgxBlock> it = all.iterator();
         NgxBlock s1 = (NgxBlock) it.next();
         assertBlock(s1, "server");
         NgxParam param = s1.findParam("application", "live");
@@ -86,9 +91,10 @@ public class NestedTest extends ParseTestBase {
     }
 
     @Test
-    public void testC1findBlock() throws Exception {
+    public void testC1findBlock() throws Exception
+    {
         NgxConfig conf = parse("nested/c1.conf");
-        List<NgxEntry> result = conf.findAll(NgxConfig.BLOCK, "rtmp", "server", "application");
+        List<NgxBlock> result = conf.findAll(NgxConfig.BLOCK, "rtmp", "server", "application");
         assertEquals(result.size(), 2);
         assertBlock(result.get(0), "application", "myapp");
         assertBlock(result.get(1), "application", "myapp2");
@@ -96,7 +102,8 @@ public class NestedTest extends ParseTestBase {
     }
 
     @Test
-    public void testС2() throws Exception {
+    public void testС2() throws Exception
+    {
         NgxConfig conf = parse("nested/c2.conf");
         NgxBlock loc = assertBlock(conf.findBlock("http", "server", "location"), "location", "/hello");
         Iterator<NgxEntry> it = loc.iterator();
@@ -107,7 +114,8 @@ public class NestedTest extends ParseTestBase {
     }
 
     @Test
-    public void testС5() throws Exception {
+    public void testС5() throws Exception
+    {
         NgxConfig conf = parse("nested/c5.conf");
         NgxBlock loc = assertBlock(conf.findBlock("http", "server", "location"), "location", "/foo");
         Iterator<NgxEntry> it = loc.iterator();
@@ -116,5 +124,32 @@ public class NestedTest extends ParseTestBase {
         assertEquals(((NgxParam) entry).getName(), "stub_status");
         assertEquals(0, ((NgxParam) entry).getValues().size());
         assertEquals("", ((NgxParam) entry).getValue());
+    }
+
+    @Test
+    public void testQuery() throws Exception
+    {
+        NgxConfig conf = parse("nested/query.conf");
+
+        List<NgxParam> blockList = conf
+                .queryNgxParam("http", "server", new Query.Eq("server_name", "localhost2"));
+        assertEquals(1, blockList.size());
+
+
+        blockList = conf
+                .queryNgxParam("http", "server", new Query.Eq("server_name", "localhost3 localhost4"));
+        blockList.forEach(block -> assertEquals("server", block.getParent().getName()));
+        assertEquals(1, blockList.size());
+
+    }
+
+    @Test
+    public void testQuery2() throws Exception
+    {
+        NgxConfig conf = parse("nested/query2.conf", "utf-8");
+        NgxDumper dumper = new NgxDumper(conf);
+        String str = dumper.dump();
+        System.out.println(str);
+
     }
 }

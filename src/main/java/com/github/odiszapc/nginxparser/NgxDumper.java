@@ -16,32 +16,34 @@
 
 package com.github.odiszapc.nginxparser;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 
 /**
  * NgxDumper is used to serialize an existing or manually created NgxConfig object
  */
-public class NgxDumper {
+public class NgxDumper
+{
 
     private NgxConfig config;
     private final static int PAD_SIZE = 2;
     private final static String PAD_SYMBOL = "  ";
     private final static String LBRACE = "{";
     private final static String RBRACE = "}";
-    private final static String LF = "\n";
+    public final static String LF = "\n";
     private final static String CRLF = "\r\n";
 
-    public NgxDumper(NgxConfig config) {
+    public NgxDumper(NgxConfig config)
+    {
         this.config = config;
     }
 
     /**
      * Converts config int String
+     *
      * @return Serialized config
      */
-    public String dump() {
+    public String dump()
+    {
         StringWriter writer = new StringWriter();
         writeToStream(config, new PrintWriter(writer), 0);
         return writer.toString();
@@ -49,16 +51,45 @@ public class NgxDumper {
 
     /**
      * Serializes config and sends result to the provided OutputStream
+     *
      * @param out stream to write to
      */
-    public void dump(OutputStream out) {
-        writeToStream(config, new PrintWriter(out), 0);
+    public void dump(OutputStream out)
+    {
+        dump(out, null);
     }
 
-    private void writeToStream(NgxBlock config, PrintWriter writer, int level) {
-        for (NgxEntry entry : config) {
+    /**
+     * Serializes config and sends result to the provided OutputStream
+     *
+     * @param out stream to write to
+     */
+    public void dump(OutputStream out, String encoding)
+    {
+        PrintWriter writer;
+        if (encoding == null)
+        {
+            writer = new PrintWriter(out);
+        } else
+        {
+            try
+            {
+                writer = new PrintWriter(new OutputStreamWriter(out, encoding));
+            } catch (UnsupportedEncodingException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        writeToStream(config, writer, 0);
+    }
+
+    private void writeToStream(NgxBlock config, PrintWriter writer, int level)
+    {
+        for (NgxEntry entry : config)
+        {
             NgxEntryType type = NgxEntryType.fromClass(entry.getClass());
-            switch (type) {
+            switch (type)
+            {
                 case BLOCK:
                     NgxBlock block = (NgxBlock) entry;
                     writer.append(getOffset(level))
@@ -93,15 +124,18 @@ public class NgxDumper {
         writer.flush();
     }
 
-    public String getOffset(int level) {
+    public String getOffset(int level)
+    {
         String offset = "";
-        for (int i = 0; i < level; i++) {
+        for (int i = 0; i < level; i++)
+        {
             offset += PAD_SYMBOL;
         }
         return offset;
     }
 
-    public String getLineEnding() {
+    public String getLineEnding()
+    {
         return LF;
     }
 }

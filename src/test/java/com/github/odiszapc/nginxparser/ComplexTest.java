@@ -32,7 +32,7 @@ public class ComplexTest extends ParseTestBase {
         NgxDumper ngxDumper = new NgxDumper(parsedConfig);
         ngxDumper.dump(System.out);
 
-        List<NgxEntry> server = parsedConfig.findAll(NgxConfig.BLOCK, "http", "server");
+        List<NgxBlock> server = parsedConfig.findAll(NgxConfig.BLOCK, "http", "server");
         Assert.assertNotNull(server.get(0));
     }
 

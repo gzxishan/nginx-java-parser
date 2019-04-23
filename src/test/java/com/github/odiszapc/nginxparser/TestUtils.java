@@ -31,6 +31,10 @@ public class TestUtils {
         return NgxConfig.read(getStream(path));
     }
 
+    public static NgxConfig parseAntlr(String path,String encoding) throws Exception {
+        return NgxConfig.read(getStream(path),encoding);
+    }
+
     public static InputStream getStream(String path) {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
     }

@@ -29,49 +29,72 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collection;
 
 /**
  * Main class that describes Nginx config
  */
-public class NgxConfig extends NgxBlock {
+public class NgxConfig extends NgxBlock
+{
 
-    public static final Class<? extends NgxEntry> PARAM = NgxParam.class;
-    public static final Class<? extends NgxEntry> COMMENT = NgxComment.class;
-    public static final Class<? extends NgxEntry> BLOCK = NgxBlock.class;
-    public static final Class<? extends NgxEntry> IF = NgxIfBlock.class;
+    public static final Class<NgxParam> PARAM = NgxParam.class;
+    public static final Class<NgxComment> COMMENT = NgxComment.class;
+    public static final Class<NgxBlock> BLOCK = NgxBlock.class;
+    public static final Class<NgxIfBlock> IF = NgxIfBlock.class;
 
     /**
      * Parse an existing config
      *
-     * @param path Path to config file
+     * @param filepath Path to config file
      * @return Config object
      * @throws IOException
      */
-    public static NgxConfig read(String path) throws IOException {
-        FileInputStream input = new FileInputStream(path);
-        return read(input);
+    public static NgxConfig read(String filepath,String encoding) throws IOException
+    {
+        FileInputStream input = new FileInputStream(filepath);
+        return read(input,encoding);
     }
 
-    public static NgxConfig read(InputStream in) throws IOException {
-        return readAntlr(in);
+    public static NgxConfig read(InputStream in) throws IOException
+    {
+        return readAntlr(in, null);
+    }
+
+    public static NgxConfig read(InputStream in, String encoding) throws IOException
+    {
+        return readAntlr(in, encoding);
     }
 
     /**
      * Read config from existing stream
+     *
      * @param input stream to read from
      * @return Config object
      * @throws IOException
      * @throws ParseException
      */
-    public static NgxConfig readJavaCC(InputStream input) throws IOException, ParseException {
+    public static NgxConfig readJavaCC(InputStream input, String encoding) throws IOException, ParseException
+    {
+        NginxConfigParser parser = new NginxConfigParser(input, encoding);
+        return parser.parse();
+    }
+
+    public static NgxConfig readJavaCC(InputStream input) throws IOException, ParseException
+    {
         NginxConfigParser parser = new NginxConfigParser(input);
         return parser.parse();
     }
 
+    public static NgxConfig readAntlr(InputStream in) throws IOException
+    {
+        return readAntlr(in, null);
+    }
 
-    public static NgxConfig readAntlr(InputStream in) throws IOException {
-        ANTLRInputStream input = new ANTLRInputStream(in);
+    public static NgxConfig readAntlr(InputStream in, String encoding) throws IOException
+    {
+        ANTLRInputStream input = encoding == null ? new ANTLRInputStream(in) : new ANTLRInputStream(
+                new InputStreamReader(in, encoding));
         NginxLexer lexer = new NginxLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         NginxParser parser = new NginxParser(tokens);
@@ -85,16 +108,19 @@ public class NgxConfig extends NgxBlock {
     }
 
     @Override
-    public Collection<NgxToken> getTokens() {
+    public Collection<NgxToken> getTokens()
+    {
         throw new IllegalStateException("Not implemented");
     }
 
     @Override
-    public void addValue(NgxToken token) {
+    public void addValue(NgxToken token)
+    {
         throw new IllegalStateException("Not implemented");
     }
 
-    public String toString() {
+    public String toString()
+    {
         return "Nginx Config (" + getEntries().size() + " entries)";
     }
 

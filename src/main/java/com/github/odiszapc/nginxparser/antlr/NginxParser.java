@@ -461,7 +461,7 @@ public class NginxParser extends Parser {
 	public final BlockContext block() throws RecognitionException {
 		BlockContext _localctx = new BlockContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_block);
-		 ((BlockContext)_localctx).ret =  new NgxBlock(); 
+		 ((BlockContext)_localctx).ret =  new NgxBlock();
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);

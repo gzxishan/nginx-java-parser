@@ -27,7 +27,7 @@ public class AlterConfigTest extends ParseTestBase {
     @Test
     public void removeManyLocations() throws Exception {
         NgxConfig conf = parse("nested/c4.conf");
-        List<NgxEntry> locations = conf.findAll(NgxConfig.BLOCK, "http", "server", "location");
+        List<NgxBlock> locations = conf.findAll(NgxConfig.BLOCK, "http", "server", "location");
         assertEquals(2, locations.size());
         conf.removeAll(locations);
         assertEquals(0, conf.findAll(NgxConfig.BLOCK, "http", "server", "location").size());

@@ -17,6 +17,9 @@
 package com.github.odiszapc.nginxparser;
 
 
-public interface NgxEntry {
+public interface NgxEntry
+{
+    NgxBlock getParent();
 
+    void setParent(NgxBlock block);
 }

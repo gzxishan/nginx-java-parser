@@ -1,5 +1,7 @@
 package com.github.odiszapc.nginxparser;
 
+import com.sun.scenario.effect.impl.prism.PrImage;
+
 import java.util.regex.Pattern;
 
 /**
@@ -7,6 +9,7 @@ import java.util.regex.Pattern;
  */
 public interface Query
 {
+
     boolean accept(NgxEntry entry);
 
 
@@ -71,10 +74,10 @@ public interface Query
         @Override
         public boolean accept(NgxEntry entry)
         {
-            if (entry instanceof NgxParam)
+            if (entry instanceof NgxAbstractEntry)
             {
-                NgxParam param = (NgxParam) entry;
-                return param.getName().equals(getName()) && param.getValue().equals(getValue());
+                NgxAbstractEntry abstractEntry = (NgxAbstractEntry) entry;
+                return abstractEntry.getName().equals(getName()) && abstractEntry.getValue().equals(getValue());
             } else
             {
                 throw new RuntimeException("not support!");
@@ -110,10 +113,10 @@ public interface Query
         @Override
         public boolean accept(NgxEntry entry)
         {
-            if (entry instanceof NgxParam)
+            if (entry instanceof NgxAbstractEntry)
             {
-                NgxParam param = (NgxParam) entry;
-                return param.getName().equals(getName()) && pattern.matcher(param.getValue()).find();
+                NgxAbstractEntry abstractEntry = (NgxAbstractEntry) entry;
+                return abstractEntry.getName().equals(getName()) && pattern.matcher(abstractEntry.getValue()).find();
             } else
             {
                 throw new RuntimeException("not support!");
@@ -121,20 +124,6 @@ public interface Query
         }
     }
 
-    class NReg extends Reg
-    {
-
-        public NReg(String name, String reg)
-        {
-            super(name, reg);
-        }
-
-        @Override
-        public boolean accept(NgxEntry entry)
-        {
-            return !super.accept(entry);
-        }
-    }
 
     class Contains extends Compare
     {
@@ -147,10 +136,10 @@ public interface Query
         @Override
         public boolean accept(NgxEntry entry)
         {
-            if (entry instanceof NgxParam)
+            if (entry instanceof NgxAbstractEntry)
             {
-                NgxParam param = (NgxParam) entry;
-                return param.getName().equals(getName()) && param.getValue().contains(getValue());
+                NgxAbstractEntry abstractEntry = (NgxAbstractEntry) entry;
+                return abstractEntry.getName().equals(getName()) && abstractEntry.getValue().contains(getValue());
             } else
             {
                 throw new RuntimeException("not support!");
@@ -158,18 +147,123 @@ public interface Query
         }
     }
 
-    class NContains extends Contains
-    {
 
-        public NContains(String name, String value)
+    class Not implements Query
+    {
+        private Query query;
+
+        public Not(Query query)
         {
-            super(name, value);
+            this.query = query;
         }
 
         @Override
         public boolean accept(NgxEntry entry)
         {
-            return !super.accept(entry);
+            return !query.accept(entry);
+        }
+    }
+
+
+    abstract class SubQuery implements Query
+    {
+        private String description;
+        protected Query[] queries;
+
+        public SubQuery(String description, Query... queries)
+        {
+            this.description = description;
+            this.queries = queries;
+        }
+
+        public String getDescription()
+        {
+            return description;
+        }
+    }
+
+    /**
+     * 子查询or。
+     */
+    class Or extends SubQuery
+    {
+        public Or(String description, Query... queries)
+        {
+            super(description, queries);
+        }
+
+        @Override
+        public boolean accept(NgxEntry entry)
+        {
+            for (Query query : queries)
+            {
+                if (query.accept(entry))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+
+    /**
+     * 子查询and.
+     */
+    class And extends SubQuery
+    {
+        public And(String description, Query... queries)
+        {
+            super(description, queries);
+        }
+
+        @Override
+        public boolean accept(NgxEntry entry)
+        {
+            for (Query query : queries)
+            {
+                if (!query.accept(entry))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+
+    /**
+     * 子检测,用于判断{@linkplain NgxBlock}当前节点是否能找到条件匹配的子节点，如果能则当前节点通过.
+     */
+    class SubDetector implements Query
+    {
+        private Object[] queries;
+
+        /**
+         * @param queries 同{@linkplain NgxBlock#query(Class, boolean, Object...)}的条件。
+         */
+        public SubDetector(Object... queries)
+        {
+            this.queries = queries;
+        }
+
+        @Override
+        public boolean accept(NgxEntry entry)
+        {
+            if (entry.getClass() == NgxBlock.class)
+            {
+                NgxBlock block = (NgxBlock) entry;
+                if (block.queryOneNgxParam(queries) != null || block.queryOneNgxBlock(queries) != null)
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
+            } else
+            {
+                return false;
+            }
         }
     }
 

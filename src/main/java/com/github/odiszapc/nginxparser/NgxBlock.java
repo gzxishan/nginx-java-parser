@@ -28,9 +28,35 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
 {
     private Collection<NgxEntry> entries = new ArrayList<NgxEntry>();
 
+
+    @Override
+    public NgxBlock cloneDeep(NgxBlock parent)
+    {
+        NgxBlock cloneBlock = (NgxBlock) super.cloneDeep(parent);
+        cloneBlock.entries = new ArrayList<>();
+        for (NgxEntry entry : this.entries)
+        {
+            entry.cloneDeep(cloneBlock);
+        }
+        return cloneBlock;
+    }
+
     public Collection<NgxEntry> getEntries()
     {
         return entries;
+    }
+
+    public Collection<NgxBlock> getBlockEntries()
+    {
+        Collection<NgxBlock> collection = new ArrayList<>();
+        for (NgxEntry entry : getEntries())
+        {
+            if (entry instanceof NgxBlock)
+            {
+                collection.add((NgxBlock) entry);
+            }
+        }
+        return collection;
     }
 
     public void addEntry(NgxEntry entry)
@@ -64,16 +90,21 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
             switch (NgxEntryType.fromClass(entry.getClass()))
             {
                 case PARAM:
-                    if (entry.equals(itemToRemove))
+                    if (entry == itemToRemove)
+                    {
                         it.remove();
+                        itemToRemove.setParent(null);
+                    }
                     break;
                 case BLOCK:
-                    if (entry.equals(itemToRemove))
+                    if (entry == itemToRemove)
+                    {
                         it.remove();
-                    else
+                        itemToRemove.setParent(null);
+                    } else
                     {
                         NgxBlock block = (NgxBlock) entry;
-                        block.remove(itemToRemove);
+                        block.remove(itemToRemove);//递归
                     }
                     break;
             }
@@ -165,24 +196,24 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
 
     public NgxParam queryOneNgxParam(Object... queries)
     {
-        List<NgxParam> list = queryNgxParam(queries);
+        List<NgxParam> list = query(NgxConfig.PARAM, true, queries);
         return list.isEmpty() ? null : list.get(0);
     }
 
     public List<NgxParam> queryNgxParam(Object... queries)
     {
-        return query(NgxConfig.PARAM, queries);
+        return query(NgxConfig.PARAM, false, queries);
     }
 
     public NgxBlock queryOneNgxBlock(Object... queries)
     {
-        List<NgxBlock> list = queryNgxBlock(queries);
+        List<NgxBlock> list = query(NgxConfig.BLOCK, true, queries);
         return list.isEmpty() ? null : list.get(0);
     }
 
     public List<NgxBlock> queryNgxBlock(Object... queries)
     {
-        return query(NgxConfig.BLOCK, queries);
+        return query(NgxConfig.BLOCK, false, queries);
     }
 
     /**
@@ -191,14 +222,14 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
      * @param <T>
      * @return
      */
-    public <T extends NgxEntry> List<T> query(Class<T> clazz, Object... queries)
+    public <T extends NgxEntry> List<T> query(Class<T> clazz, boolean justOne, Object... queries)
     {
         List<T> res = new ArrayList<>();
 
         if (0 == queries.length)
         {
             queries = new Query[]{
-                    entry -> true
+                    (entry) -> true
             };
         }
 
@@ -222,10 +253,9 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
             switch (NgxEntryType.fromClass(entry.getClass()))
             {
                 case PARAM:
-                    NgxParam param = (NgxParam) entry;
-                    if (param.getClass() == clazz && head.accept(param))
+                    if (queryList.isEmpty() && entry.getClass() == clazz && head.accept(entry))
                     {
-                        res.add((T) param);
+                        res.add((T) entry);//获取到节点
                     }
                     break;
 
@@ -235,16 +265,20 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
                     {
                         if (head.accept(block))
                         {
-                            res.addAll(block.query(clazz, queryList.toArray(new Query[0])));
+                            res.addAll(block.query(clazz, justOne, queryList.toArray(new Query[0])));//查询子节点
                         }
                     } else
                     {
-                        if (clazz.equals(NgxBlock.class) && head.accept(block))
+                        if (entry.getClass() == clazz && head.accept(block))
                         {
-                            res.add((T) block);
+                            res.add((T) block);//获取到节点
                         }
                     }
                     break;
+            }
+            if (justOne && res.size() > 0)
+            {
+                break;
             }
         }
 

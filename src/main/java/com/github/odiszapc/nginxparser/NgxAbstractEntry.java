@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class NgxAbstractEntry implements NgxEntry
+public abstract class NgxAbstractEntry implements NgxEntry, Cloneable
 {
     private Collection<NgxToken> tokens = new ArrayList<NgxToken>();
     private NgxBlock parent;
@@ -29,6 +29,28 @@ public abstract class NgxAbstractEntry implements NgxEntry
     public NgxAbstractEntry(String... rawValues)
     {
         setValues(false, rawValues);
+    }
+
+    @Override
+    public NgxAbstractEntry cloneDeep(NgxBlock parent)
+    {
+        try
+        {
+            NgxAbstractEntry cloneEntry = (NgxAbstractEntry) super.clone();
+            cloneEntry.parent=null;
+            if(parent!=null){
+                parent.addEntry(cloneEntry);
+            }
+            cloneEntry.tokens = new ArrayList<>();
+            for (NgxToken ngxToken : this.tokens)
+            {
+                cloneEntry.tokens.add(ngxToken.clone());
+            }
+            return cloneEntry;
+        } catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -41,6 +63,17 @@ public abstract class NgxAbstractEntry implements NgxEntry
     public void setParent(NgxBlock parent)
     {
         this.parent = parent;
+    }
+
+    @Override
+    public void removeSelf()
+    {
+        NgxBlock parent = getParent();
+        if (parent == null)
+        {
+            throw new RuntimeException("not found parent");
+        }
+        parent.remove(this);
     }
 
     public Collection<NgxToken> getTokens()

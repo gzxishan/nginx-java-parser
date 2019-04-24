@@ -16,23 +16,40 @@
 
 package com.github.odiszapc.nginxparser;
 
-public class NgxToken {
+public class NgxToken implements Cloneable
+{
     private String token;
 
-    public NgxToken(String token) {
-        this.token = token;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
+    public NgxToken(String token)
+    {
         this.token = token;
     }
 
     @Override
-    public String toString() {
+    public NgxToken clone()
+    {
+        try
+        {
+            return (NgxToken) super.clone();
+        } catch (CloneNotSupportedException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getToken()
+    {
+        return token;
+    }
+
+    public void setToken(String token)
+    {
+        this.token = token;
+    }
+
+    @Override
+    public String toString()
+    {
         return token;
     }
 }

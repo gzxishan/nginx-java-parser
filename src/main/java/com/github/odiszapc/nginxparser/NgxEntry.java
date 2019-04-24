@@ -22,4 +22,12 @@ public interface NgxEntry
     NgxBlock getParent();
 
     void setParent(NgxBlock block);
+
+    void removeSelf();
+
+    /**
+     * @param parent 会将克隆的节点添加到parent
+     * @return
+     */
+    NgxEntry cloneDeep(NgxBlock parent);
 }

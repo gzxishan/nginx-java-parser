@@ -1,12 +1,12 @@
 grammar Nginx;
 
 @parser::header {
-    package com.github.odiszapc.nginxparser.antlr;
-    import com.github.odiszapc.nginxparser.*;
+//package com.github.odiszapc.nginxparser.antlr;
+import com.github.odiszapc.nginxparser.*;
 }
 
 @lexer::header {
-    package com.github.odiszapc.nginxparser.antlr;
+//package com.github.odiszapc.nginxparser.antlr;
 }
 
 config returns [NgxConfig ret]
@@ -146,14 +146,14 @@ Value: STR_EXT | QUOTED_STRING | SINGLE_QUOTED
 
 STR_EXT
   :
-  ([a-zA-Z0-9_/\.,\-:=~+!?$&^*\[\]@|#] | NON_ASCII)+;
+  ([a-zA-Z0-9_/\\.,\-:=~+!?$&^*[\]@|#] | NON_ASCII)+;
 
 Comment
     :
-    '#' ~[\r\n]*;
+    '#' ~[\r\n]*([\r\n])*;
 
 REGEXP_PREFIXED
-  : (RegexpPrefix)[a-zA-Z0-9_/\.,\-:=~+!?$&^*\[\]@|#)(]+
+  : (RegexpPrefix)[a-zA-Z0-9_/\\.,\-:=~+!?$&^*[\]@|#)(]+
   ;
 
 QUOTED_STRING

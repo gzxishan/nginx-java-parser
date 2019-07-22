@@ -18,64 +18,96 @@ package com.github.odiszapc.nginxparser;
 
 import org.junit.Assert;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 
-public class TestUtils {
-    public static NgxConfig parseJavaCC(String path) throws Exception {
+public class TestUtils
+{
+    public static NgxConfig parseJavaCC(String path) throws Exception
+    {
         InputStream input = getStream(path);
         return NgxConfig.readJavaCC(input);
     }
 
-    public static NgxConfig parseAntlr(String path) throws Exception {
+    public static NgxConfig parseAntlr(String path) throws Exception
+    {
         return NgxConfig.read(getStream(path));
     }
 
-    public static NgxConfig parseAntlr(String path,String encoding) throws Exception {
-        return NgxConfig.read(getStream(path),encoding);
+    public static NgxConfig parseAntlr(String path, String encoding) throws Exception
+    {
+        return NgxConfig.read(getStream(path), encoding);
     }
 
-    public static InputStream getStream(String path) {
+    public static InputStream getStream(String path)
+    {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
     }
 
-    public static String dump(String path) throws Exception {
-        NgxConfig conf = TestUtils.parseAntlr(path);
-        NgxDumper dumper = new NgxDumper(conf);
-        return dumper.dump();
+    public static String getString(String path)
+    {
+        return getString(path, "utf-8");
     }
 
-    public static void assertParam(NgxEntry entry, String name, String... values) {
+    public static String getString(String path, String encoding)
+    {
+        try (InputStream in = getStream(path))
+        {
+            byte[] buf = new byte[in.available()];
+            int n = in.read(buf);
+            return new String(buf, 0, n, encoding);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String dump(String path) throws Exception
+    {
+        NgxConfig conf = TestUtils.parseAntlr(path);
+        NgxDumper dumper = new NgxDumper(conf);
+        return dumper.dump().replace(NgxDumper.CRLF,NgxDumper.LF);
+    }
+
+    public static void assertParam(NgxEntry entry, String name, String... values)
+    {
         Assert.assertTrue(entry instanceof NgxParam);
         Assert.assertEquals(((NgxParam) entry).getName(), name);
 
         Iterator<String> it = ((NgxParam) entry).getValues().iterator();
-        for (String value : values) {
+        for (String value : values)
+        {
             Assert.assertEquals(it.next(), value);
         }
 
     }
 
-    public static NgxBlock assertBlock(NgxEntry entry, String name, String... values) {
+    public static NgxBlock assertBlock(NgxEntry entry, String name, String... values)
+    {
         Assert.assertTrue(entry instanceof NgxBlock);
         Assert.assertEquals(((NgxBlock) entry).getName(), name);
 
         Assert.assertEquals(values.length, ((NgxBlock) entry).getValues().size());
         Iterator<String> it = ((NgxBlock) entry).getValues().iterator();
-        for (String value : values) {
+        for (String value : values)
+        {
             Assert.assertEquals(it.next(), value);
         }
 
         return (NgxBlock) entry;
     }
 
-    public static NgxIfBlock assertIfBlock(NgxEntry entry, String name, String... values) {
+    public static NgxIfBlock assertIfBlock(NgxEntry entry, String name, String... values)
+    {
         Assert.assertTrue(entry instanceof NgxBlock);
         Assert.assertEquals(((NgxIfBlock) entry).getName(), name);
 
         Assert.assertEquals(values.length, ((NgxBlock) entry).getValues().size());
         Iterator<String> it = ((NgxBlock) entry).getValues().iterator();
-        for (String value : values) {
+        for (String value : values)
+        {
             Assert.assertEquals(it.next(), value);
         }
 
@@ -83,9 +115,10 @@ public class TestUtils {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public static NgxComment assertComment(NgxEntry entry, @SuppressWarnings("SameParameterValue") String value) {
+    public static NgxComment assertComment(NgxEntry entry, @SuppressWarnings("SameParameterValue") String value)
+    {
         Assert.assertTrue(entry instanceof NgxComment);
-        Assert.assertEquals(((NgxComment) entry).getValue(), value);
+        Assert.assertEquals(((NgxComment) entry).getValue().trim(), value);
         return (NgxComment) entry;
     }
 }

@@ -19,6 +19,8 @@ package com.github.odiszapc.nginxparser;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+
 public class DumperTest {
 
     @Test
@@ -52,5 +54,15 @@ public class DumperTest {
                 "worker_priority -10;\n" +
                 "proxy_pass http://unix:/opt/apps/ipn/ipn.sock:/;\n";
         Assert.assertEquals(TestUtils.dump("common/c3.conf"), expected);
+    }
+
+    @Test
+    public void testConf() throws Exception
+    {
+        String lastConf = TestUtils.getString("dumper/nginx.conf");
+        NgxConfig ngxConfig = NgxConfig.read(TestUtils.getStream("dumper/nginx.conf"));
+        NgxDumper dumper = new NgxDumper(ngxConfig);
+        String conf = dumper.dump();
+//        System.out.println(conf);
     }
 }

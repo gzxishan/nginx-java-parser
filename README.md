@@ -82,3 +82,7 @@ Alexey Plotnik (odiszapc@gmail.com, http://twitter.com/odiszapc, http://alexey-p
 
 #### License
 Apache 2.0
+
+### 编译g4文件
+- 安装idea插件：antlr-v4-grammar-plugin
+- 在g4文件右键，选择configure ANTLR...,package/namespace可设置成所在包,Output directory设置输出目录

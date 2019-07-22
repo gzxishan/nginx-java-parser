@@ -30,7 +30,7 @@ public class NgxDumper
     private final static String LBRACE = "{";
     private final static String RBRACE = "}";
     public final static String LF = "\n";
-    private final static String CRLF = "\r\n";
+    public final static String CRLF = "\r\n";
 
     public NgxDumper(NgxConfig config)
     {
@@ -113,6 +113,11 @@ public class NgxDumper
                             .append(LBRACE)
                             .append(getLineEnding());
                 case COMMENT:
+                    writer
+                            .append(getOffset(level))
+                            .append(entry.toString());
+                            //.append(getLineEnding());
+                    break;
                 case PARAM:
                     writer
                             .append(getOffset(level))

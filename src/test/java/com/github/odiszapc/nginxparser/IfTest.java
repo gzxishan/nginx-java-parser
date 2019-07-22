@@ -46,7 +46,8 @@ public class IfTest extends ParseTestBase {
     }
 
     private NgxEntry extractIF(String path) throws Exception {
-        Iterator<NgxEntry> it = parse(path).getEntries().iterator();
+        NgxConfig ngxConfig=parse(path);
+        Iterator<NgxEntry> it = ngxConfig.getEntries().iterator();
         NgxBlock block = (NgxBlock) it.next();
         Iterator<NgxEntry> it2 = block.iterator();
         return it2.next();

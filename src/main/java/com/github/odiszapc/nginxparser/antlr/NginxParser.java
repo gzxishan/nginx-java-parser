@@ -1,7 +1,8 @@
-// Generated from Nginx.g4 by ANTLR 4.5.3
+// Generated from E:/workspace/idea2018/nginx-java-parser/src/main/resources/grammar\Nginx.g4 by ANTLR 4.7.2
+package com.github.odiszapc.nginxparser.antlr;
 
-    package com.github.odiszapc.nginxparser.antlr;
-    import com.github.odiszapc.nginxparser.*;
+//package com.github.odiszapc.nginxparser.antlr;
+import com.github.odiszapc.nginxparser.*;
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class NginxParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.5.3", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -27,21 +28,30 @@ public class NginxParser extends Parser {
 		RULE_config = 0, RULE_statement = 1, RULE_genericStatement = 2, RULE_regexHeaderStatement = 3, 
 		RULE_block = 4, RULE_genericBlockHeader = 5, RULE_if_statement = 6, RULE_if_body = 7, 
 		RULE_regexp = 8, RULE_locationBlockHeader = 9, RULE_rewriteStatement = 10;
-	public static final String[] ruleNames = {
-		"config", "statement", "genericStatement", "regexHeaderStatement", "block", 
-		"genericBlockHeader", "if_statement", "if_body", "regexp", "locationBlockHeader", 
-		"rewriteStatement"
-	};
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"config", "statement", "genericStatement", "regexHeaderStatement", "block", 
+			"genericBlockHeader", "if_statement", "if_body", "regexp", "locationBlockHeader", 
+			"rewriteStatement"
+		};
+	}
+	public static final String[] ruleNames = makeRuleNames();
 
-	private static final String[] _LITERAL_NAMES = {
-		null, "';'", "'{'", "'}'", "'if'", "'('", "')'", "'\\.'", "'^'", "'location'", 
-		"'rewrite'", "'last'", "'break'", "'redirect'", "'permanent'"
-	};
-	private static final String[] _SYMBOLIC_NAMES = {
-		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, "Value", "STR_EXT", "Comment", "REGEXP_PREFIXED", "QUOTED_STRING", 
-		"SINGLE_QUOTED", "WS"
-	};
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, "';'", "'{'", "'}'", "'if'", "'('", "')'", "'\\.'", "'^'", "'location'", 
+			"'rewrite'", "'last'", "'break'", "'redirect'", "'permanent'"
+		};
+	}
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, null, null, null, null, null, null, null, null, null, null, null, 
+			null, null, null, "Value", "STR_EXT", "Comment", "REGEXP_PREFIXED", "QUOTED_STRING", 
+			"SINGLE_QUOTED", "WS"
+		};
+	}
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
@@ -91,6 +101,7 @@ public class NginxParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
+
 	public static class ConfigContext extends ParserRuleContext {
 		public NgxConfig ret;
 		public StatementContext statement;
@@ -227,6 +238,7 @@ public class NginxParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(43);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__9:
 				{
@@ -461,12 +473,13 @@ public class NginxParser extends Parser {
 	public final BlockContext block() throws RecognitionException {
 		BlockContext _localctx = new BlockContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_block);
-		 ((BlockContext)_localctx).ret =  new NgxBlock();
+		 ((BlockContext)_localctx).ret =  new NgxBlock(); 
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(70);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__8:
 				{
@@ -486,6 +499,7 @@ public class NginxParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			setState(73);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==Comment) {
 				{
@@ -687,6 +701,7 @@ public class NginxParser extends Parser {
 			((If_statementContext)_localctx).if_body = if_body();
 			 _localctx.ret.getTokens().addAll(((If_statementContext)_localctx).if_body.ret); 
 			setState(111);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==Comment) {
 				{
@@ -863,6 +878,7 @@ public class NginxParser extends Parser {
 				case 1:
 					{
 					setState(151);
+					_errHandler.sync(this);
 					switch (_input.LA(1)) {
 					case T__6:
 						{
@@ -1069,6 +1085,7 @@ public class NginxParser extends Parser {
 			((RewriteStatementContext)_localctx).Value = match(Value);
 			 _localctx.ret.addValue((((RewriteStatementContext)_localctx).Value!=null?((RewriteStatementContext)_localctx).Value.getText():null)); 
 			setState(181);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__13))) != 0)) {
 				{
@@ -1077,7 +1094,10 @@ public class NginxParser extends Parser {
 				_la = _input.LA(1);
 				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__13))) != 0)) ) {
 					((RewriteStatementContext)_localctx).opt = (Token)_errHandler.recoverInline(this);
-				} else {
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
 					consume();
 				}
 				 _localctx.ret.addValue((((RewriteStatementContext)_localctx).opt!=null?((RewriteStatementContext)_localctx).opt.getText():null)); 
@@ -1098,7 +1118,7 @@ public class NginxParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\27\u00ba\4\2\t\2"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\27\u00ba\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\6\2!\n\2\r\2\16\2\"\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3.\n\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4"+
@@ -1111,8 +1131,8 @@ public class NginxParser extends Parser {
 		"\3\n\3\n\6\n\u009a\n\n\r\n\16\n\u009b\3\13\3\13\3\13\3\13\5\13\u00a2\n"+
 		"\13\3\13\3\13\3\13\3\13\3\13\5\13\u00a9\n\13\3\f\3\f\3\f\3\f\3\f\3\f\3"+
 		"\f\5\f\u00b2\n\f\3\f\3\f\3\f\3\f\5\f\u00b8\n\f\3\f\2\2\r\2\4\6\b\n\f\16"+
-		"\20\22\24\26\2\3\3\2\r\20\u00ca\2 \3\2\2\2\4-\3\2\2\2\6\61\3\2\2\2\b="+
-		"\3\2\2\2\nH\3\2\2\2\f`\3\2\2\2\16l\3\2\2\2\20~\3\2\2\2\22\u0099\3\2\2"+
+		"\20\22\24\26\2\3\3\2\r\20\2\u00ca\2 \3\2\2\2\4-\3\2\2\2\6\61\3\2\2\2\b"+
+		"=\3\2\2\2\nH\3\2\2\2\f`\3\2\2\2\16l\3\2\2\2\20~\3\2\2\2\22\u0099\3\2\2"+
 		"\2\24\u009d\3\2\2\2\26\u00aa\3\2\2\2\30\31\5\4\3\2\31\32\b\2\1\2\32!\3"+
 		"\2\2\2\33\34\5\n\6\2\34\35\b\2\1\2\35!\3\2\2\2\36\37\7\23\2\2\37!\b\2"+
 		"\1\2 \30\3\2\2\2 \33\3\2\2\2 \36\3\2\2\2!\"\3\2\2\2\" \3\2\2\2\"#\3\2"+

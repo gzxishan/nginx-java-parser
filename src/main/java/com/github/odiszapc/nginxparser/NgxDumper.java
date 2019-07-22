@@ -115,7 +115,7 @@ public class NgxDumper
                 case COMMENT:
                     writer
                             .append(getOffset(level))
-                            .append(entry.toString());
+                            .append(entry.toString().replace(CRLF,getLineEnding()));
                             //.append(getLineEnding());
                     break;
                 case PARAM:

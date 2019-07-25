@@ -61,6 +61,10 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
 
     public void addEntry(NgxEntry entry)
     {
+        if (entry.getParent() != null)
+        {
+            entry.removeSelf();
+        }
         entry.setParent(this);
         entries.add(entry);
     }
@@ -90,6 +94,7 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
             switch (NgxEntryType.fromClass(entry.getClass()))
             {
                 case PARAM:
+                case COMMENT:
                     if (entry == itemToRemove)
                     {
                         it.remove();
@@ -207,6 +212,7 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
 
     /**
      * 注意：注释包含后面的多个换行符
+     *
      * @param queries
      * @return
      */

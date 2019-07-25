@@ -56,13 +56,4 @@ public class DumperTest {
         Assert.assertEquals(TestUtils.dump("common/c3.conf"), expected);
     }
 
-    @Test
-    public void testConf() throws Exception
-    {
-        String lastConf = TestUtils.getString("dumper/nginx.conf");
-        NgxConfig ngxConfig = NgxConfig.read(TestUtils.getStream("dumper/nginx.conf"));
-        NgxDumper dumper = new NgxDumper(ngxConfig);
-        String conf = dumper.dump();
-//        System.out.println(conf);
-    }
 }

@@ -317,4 +317,29 @@ public interface Query
         }
     }
 
+    class Comment implements Query
+    {
+
+        private String value;
+
+        public Comment(String value)
+        {
+            this.value = value;
+        }
+
+        @Override
+        public boolean accept(NgxEntry entry)
+        {
+            if (entry.getClass() == NgxComment.class)
+            {
+                NgxComment ngxComment = (NgxComment) entry;
+                String str = ngxComment.getValue().replaceAll("[\r\n]", "");
+                return str.equals(this.value);
+            } else
+            {
+                return false;
+            }
+        }
+    }
+
 }

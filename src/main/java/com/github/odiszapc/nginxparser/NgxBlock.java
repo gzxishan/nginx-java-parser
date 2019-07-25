@@ -205,6 +205,22 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
         return query(NgxConfig.PARAM, false, queries);
     }
 
+    /**
+     * 注意：注释包含后面的多个换行符
+     * @param queries
+     * @return
+     */
+    public NgxComment queryOneNgxComment(Object... queries)
+    {
+        List<NgxComment> list = query(NgxConfig.COMMENT, true, queries);
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    public List<NgxComment> queryNgxComment(Object... queries)
+    {
+        return query(NgxConfig.COMMENT, false, queries);
+    }
+
     public NgxBlock queryOneNgxBlock(Object... queries)
     {
         List<NgxBlock> list = query(NgxConfig.BLOCK, true, queries);
@@ -253,12 +269,12 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
             switch (NgxEntryType.fromClass(entry.getClass()))
             {
                 case PARAM:
+                case COMMENT:
                     if (queryList.isEmpty() && entry.getClass() == clazz && head.accept(entry))
                     {
                         res.add((T) entry);//获取到节点
                     }
                     break;
-
                 case BLOCK:
                     NgxBlock block = (NgxBlock) entry;
                     if (queryList.size() > 0)

@@ -1,7 +1,5 @@
 package com.github.odiszapc.nginxparser;
 
-import com.sun.scenario.effect.impl.prism.PrImage;
-
 import java.util.regex.Pattern;
 
 /**
@@ -124,7 +122,9 @@ public interface Query
         }
     }
 
-
+    /**
+     * 判断值存在指定的内容
+     */
     class Contains extends Compare
     {
 
@@ -140,6 +140,56 @@ public interface Query
             {
                 NgxAbstractEntry abstractEntry = (NgxAbstractEntry) entry;
                 return abstractEntry.getName().equals(getName()) && abstractEntry.getValue().contains(getValue());
+            } else
+            {
+                throw new RuntimeException("not support!");
+            }
+        }
+    }
+
+    /**
+     * 判断以指定的值开始
+     */
+    class Starts extends Compare
+    {
+
+        public Starts(String name, String value)
+        {
+            super(name, value);
+        }
+
+        @Override
+        public boolean accept(NgxEntry entry)
+        {
+            if (entry instanceof NgxAbstractEntry)
+            {
+                NgxAbstractEntry abstractEntry = (NgxAbstractEntry) entry;
+                return abstractEntry.getName().equals(getName()) && abstractEntry.getValue().startsWith(getValue());
+            } else
+            {
+                throw new RuntimeException("not support!");
+            }
+        }
+    }
+
+    /**
+     * 判断以指定的值结束
+     */
+    class Ends extends Compare
+    {
+
+        public Ends(String name, String value)
+        {
+            super(name, value);
+        }
+
+        @Override
+        public boolean accept(NgxEntry entry)
+        {
+            if (entry instanceof NgxAbstractEntry)
+            {
+                NgxAbstractEntry abstractEntry = (NgxAbstractEntry) entry;
+                return abstractEntry.getName().equals(getName()) && abstractEntry.getValue().endsWith(getValue());
             } else
             {
                 throw new RuntimeException("not support!");
@@ -183,7 +233,7 @@ public interface Query
     }
 
     /**
-     * 子查询or。
+     * 子查询or，判断当前节点是否有一个满足条件
      */
     class Or extends SubQuery
     {
@@ -208,7 +258,7 @@ public interface Query
 
 
     /**
-     * 子查询and.
+     * 子查询and,判断当前节点是否满足所有条件
      */
     class And extends SubQuery
     {

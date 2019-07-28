@@ -86,7 +86,7 @@ TOKEN:
 {
   <SINGLE_LINE_COMMENT: <COMMENT_SIGN> <COMMENT_BODY> >
   | <#COMMENT_SIGN: "#">
-  | <#COMMENT_BODY: (~["\n", "\r"])*>
+  | <#COMMENT_BODY: (~["\n", "\r"])*(["\n", "\r"])*>
 }
 
 

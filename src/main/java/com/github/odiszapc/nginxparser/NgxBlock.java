@@ -239,8 +239,9 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
     }
 
     /**
-     * @param clazz
-     * @param queries 支持String（同{@linkplain Query.Name}）与{@linkplain Query}
+     * @param clazz   支持:{@linkplain NgxParam NgxParam.class},{@linkplain NgxBlock NgxBlock.class},
+     * {@linkplain NgxComment NgxComment.class}
+     * @param queries 另见{@linkplain Query#toQuery(Object[])}。
      * @param <T>
      * @return
      */
@@ -255,18 +256,7 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
             };
         }
 
-        List<Query> queryList = new ArrayList<>();
-
-        for (int i = 0; i < queries.length; i++)
-        {
-            if (queries[i] instanceof Query)
-            {
-                queryList.add((Query) queries[i]);
-            } else
-            {
-                queryList.add(new Query.Name(String.valueOf(queries[i])));
-            }
-        }
+        List<Query> queryList = Query.toQuery(queries);
 
         Query head = queryList.remove(0);
 

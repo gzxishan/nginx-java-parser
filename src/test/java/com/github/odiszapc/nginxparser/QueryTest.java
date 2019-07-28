@@ -19,12 +19,12 @@ public class QueryTest extends ParseTestBase
         NgxConfig conf = parse("nested/query.conf");
 
         List<NgxParam> blockList = conf
-                .queryNgxParam("http", "server", new Query.Eq("server_name", "localhost2"));
+                .queryNgxParam("http", "server", new Query.EQ("server_name", "localhost2"));
         assertEquals(1, blockList.size());
 
 
         blockList = conf
-                .queryNgxParam("http", "server", new Query.Eq("server_name", "localhost3 localhost4"));
+                .queryNgxParam("http", "server", new Query.EQ("server_name", "localhost3 localhost4"));
         blockList.forEach(block -> assertEquals("server", block.getParent().getName()));
         assertEquals(1, blockList.size());
 
@@ -50,6 +50,25 @@ public class QueryTest extends ParseTestBase
         ngxConfig = NgxConfig.read(new ByteArrayInputStream(conf.getBytes()));
 
         assertNotNull(ngxConfig.queryOneNgxComment(new Query.Comment("user  nobody;")));
+        assertNotNull(ngxConfig.queryOneNgxComment(new Query.CommentStarts("pid")));
+        assertNotNull(ngxConfig.queryOneNgxComment("http", new Query.Comment("gzip  on;")));
+
+        //AND条件：name为server，且监听80端口(子节点)
+        assertNotNull(ngxConfig.queryOneNgxBlock("http",
+                Query.and("server", Query.detector(Query.eq("listen", "80"))))
+        );
+
+        //获取监听80端口的server节点，或者监听8080端口且含有注释"#listen 80;"的server节点
+        List<NgxBlock> ngxBlocks = ngxConfig.queryNgxBlock("http",
+                Query.or(
+                        Query.and("server", Query.detector(Query.eq("listen", "80"))),
+                        Query.and("server",
+                                Query.detector(Query.eq("listen", "8080")),
+                                Query.detector(Query.comment("listen 80;"))
+                        )
+                )
+        );
+        assertEquals(2,ngxBlocks.size());
 
     }
 }

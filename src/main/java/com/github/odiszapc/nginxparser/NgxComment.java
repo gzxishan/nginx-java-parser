@@ -20,18 +20,26 @@ package com.github.odiszapc.nginxparser;
  * Comment. Example:
  * # Bla bla
  */
-public class NgxComment extends NgxAbstractEntry {
+public class NgxComment extends NgxAbstractEntry
+{
 
-    public NgxComment(String comment) {
+    public NgxComment(String comment)
+    {
+        if (!comment.endsWith(NgxDumper.LF))
+        {
+            comment += NgxDumper.LF;
+        }
         getTokens().add(new NgxToken(comment.substring(1)));
     }
 
     @Override
-    public String getValue() {
+    public String getValue()
+    {
         return getName();
     }
 
-    public String toString() {
+    public String toString()
+    {
         return "#" + getValue();
     }
 }

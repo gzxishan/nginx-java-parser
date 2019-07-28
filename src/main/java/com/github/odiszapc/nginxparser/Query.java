@@ -55,6 +55,26 @@ public interface Query
         return new EQ(name, value);
     }
 
+    static Query starts(String name, String value)
+    {
+        return new Starts(name, value);
+    }
+
+    static Query ends(String name, String value)
+    {
+        return new Ends(name, value);
+    }
+
+    static Query contains(String name, String value)
+    {
+        return new Contains(name, value);
+    }
+
+    static Query reg(String name, String reg)
+    {
+        return new Reg(name, reg);
+    }
+
     static Query detector(Object... queries)
     {
         return new SubDetector(queries);

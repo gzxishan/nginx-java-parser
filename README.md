@@ -5,7 +5,7 @@ This library helps in analyzing Nginx web server configuration files, looking up
 
 ##
 # 版本
-当前最新版本为  [**1.0.12**](http://mvnrepository.com/artifact/com.xishankeji.forks)
+当前最新版本为  [**1.0.12**](http://mvnrepository.com/artifact/com.xishankeji)
 
 ![Version](https://img.shields.io/badge/Version-1.0.12-brightgreen.svg)
 ![License](http://img.shields.io/:License-Apache2.0-blue.svg)
@@ -25,7 +25,7 @@ This library helps in analyzing Nginx web server configuration files, looking up
 Add the following dependency to your POM:
 ```xml
 <dependency>
-    <groupId>com.xishankeji.forks</groupId>
+    <groupId>com.xishankeji</groupId>
     <artifactId>nginxparser</artifactId>
     <version>1.0.12</version>
 </dependency>

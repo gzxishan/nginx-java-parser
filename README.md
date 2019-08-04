@@ -1,6 +1,16 @@
 # Nginx configuration Java parser
 
 This library helps in analyzing Nginx web server configuration files, looking up for specified parameters, blocks, regular expressions or comments. Then AST can be modified and converted back to plain file.
+在原基础上增加了query系列函数、快速方便定位指定节点。
+
+##
+# 版本
+当前最新版本为  [**1.0.12**](http://mvnrepository.com/artifact/com.xishankeji.forks)
+
+![Version](https://img.shields.io/badge/Version-1.0.12-brightgreen.svg)
+![License](http://img.shields.io/:License-Apache2.0-blue.svg)
+![JDK 1.8](https://img.shields.io/badge/JDK-1.8-green.svg)
+
 
 #### Features
 - Convert config file to AST tree using ANTLR4 parsing capabilities
@@ -15,9 +25,9 @@ This library helps in analyzing Nginx web server configuration files, looking up
 Add the following dependency to your POM:
 ```xml
 <dependency>
-    <groupId>com.github.odiszapc</groupId>
+    <groupId>com.xishankeji.forks</groupId>
     <artifactId>nginxparser</artifactId>
-    <version>0.9.3</version>
+    <version>1.0.12</version>
 </dependency>
 ```
 

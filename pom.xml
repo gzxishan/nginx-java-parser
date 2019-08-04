@@ -22,45 +22,41 @@
 
     <groupId>com.xishankeji.forks</groupId>
     <artifactId>nginxparser</artifactId>
-    <version>1.0.11</version>
+    <version>1.0.12</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>Parses Nginx configuration files with JavaCC grammar based parser</description>
-    <url>https://github.com/gzxishan/nginx-java-parser</url>
+    <description>Nginx configuration parser based on ANTLR4 grammar.在原基础上增加了query系列函数、快速方便定位指定节点。</description>
+    <url>https://gitee.com/xishankeji/nginx-java-parser</url>
 
     <licenses>
         <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
 
     <developers>
         <developer>
-            <id>odiszapc</id>
-            <name>Alexey Plotnik</name>
-            <email>odiszapc@gmail.com</email>
-            <url>http://github.com/odiszapc</url>
+            <name>chenyg</name>
+            <email>zggzcyg@qq.com</email>
+            <organization>GuiZhouXiShanTechnology</organization>
+            <organizationUrl>http://www.xishankeji.com</organizationUrl>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com:odiszapc/nginx-java-parser.git</connection>
-        <developerConnection>scm:git:git@github.com:odiszapc/nginx-java-parser.git</developerConnection>
-        <url>git@github.com:odiszapc/nginx-java-parser.git</url>
+        <connection>
+            scm:git:https://gitee.com/xishankeji/nginx-java-parser.git
+        </connection>
+        <developerConnection>
+            scm:git:https://gitee.com/xishankeji/nginx-java-parser.git
+        </developerConnection>
+        <url>https://gitee.com/xishankeji/nginx-java-parser</url>
+        <tag>v1.0.x</tag>
     </scm>
 
-    <!--<distributionManagement>-->
-    <!--<snapshotRepository>-->
-    <!--<id>ossrh</id>-->
-    <!--<url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
-    <!--</snapshotRepository>-->
-    <!--<repository>-->
-    <!--<id>ossrh</id>-->
-    <!--<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
-    <!--</repository>-->
-    <!--</distributionManagement>-->
+
 
     <distributionManagement>
         <repository>
@@ -138,49 +134,62 @@
         </plugins>
     </build>
 
+    <!--
+  发布命令：mvn clean deploy -P release-oss
+  https://oss.sonatype.org
+  https://oss.sonatype.org/content/repositories/snapshots/
+  -->
     <profiles>
         <profile>
-            <id>release-sign-artifacts</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
+            <id>release-oss</id>
             <build>
                 <plugins>
+                    <!-- Source -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
+                        <version>2.4</version>
                         <executions>
                             <execution>
-                                <id>attach-sources</id>
+                                <phase>package</phase>
                                 <goals>
-                                    <goal>jar</goal>
+                                    <goal>jar-no-fork</goal>
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <includePom>true</includePom>
+                        </configuration>
                     </plugin>
-
+                    <!-- Javadoc -->
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
+                                <configuration>
+                                    <encoding>UTF-8</encoding>
+                                    <!--<additionalparam>-Xdoclint:none</additionalparam>-->
+                                    <doclint>none</doclint>
+                                    <failOnError>false</failOnError>
+                                </configuration>
                             </execution>
                         </executions>
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                        </configuration>
                     </plugin>
-
+                    <!-- GPG -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
                         <executions>
                             <execution>
-                                <id>sign-artifacts</id>
                                 <phase>verify</phase>
                                 <goals>
                                     <goal>sign</goal>
@@ -188,20 +197,19 @@
                             </execution>
                         </executions>
                     </plugin>
-
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.2</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>sonatype</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>sonatype</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
         </profile>
     </profiles>
+
 </project>

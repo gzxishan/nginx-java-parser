@@ -30,4 +30,32 @@ public interface NgxEntry
      * @return
      */
     NgxEntry cloneDeep(NgxBlock parent);
+
+    /**
+     * 获取之前的节点
+     *
+     * @return
+     */
+    NgxEntry before();
+
+    /**
+     * 获取之后的节点
+     *
+     * @return
+     */
+    NgxEntry after();
+
+    /**
+     * 再此节点之前添加
+     *
+     * @param entry
+     */
+    void addBefore(NgxEntry entry);
+
+    /**
+     * 再此节点之后添加
+     *
+     * @param entry
+     */
+    void addAfter(NgxEntry entry);
 }

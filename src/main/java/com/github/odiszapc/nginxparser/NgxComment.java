@@ -25,19 +25,33 @@ public class NgxComment extends NgxAbstractEntry
 
     public NgxComment(String comment)
     {
+        if (comment.startsWith("#"))
+        {
+            comment = comment.substring(1);
+        }
         if (!comment.endsWith(NgxDumper.LF))
         {
             comment += NgxDumper.LF;
         }
-        getTokens().add(new NgxToken(comment.substring(1)));
+        getTokens().add(new NgxToken(comment));
     }
 
+    /**
+     * 不含"#",末尾会包含若干换行符。
+     *
+     * @return
+     */
     @Override
     public String getValue()
     {
         return getName();
     }
 
+    /**
+     * 包含"#"
+     *
+     * @return
+     */
     public String toString()
     {
         return "#" + getValue();

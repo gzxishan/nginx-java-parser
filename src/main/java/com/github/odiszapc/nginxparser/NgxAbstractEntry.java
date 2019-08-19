@@ -37,8 +37,9 @@ public abstract class NgxAbstractEntry implements NgxEntry, Cloneable
         try
         {
             NgxAbstractEntry cloneEntry = (NgxAbstractEntry) super.clone();
-            cloneEntry.parent=null;
-            if(parent!=null){
+            cloneEntry.parent = null;
+            if (parent != null)
+            {
                 parent.addEntry(cloneEntry);
             }
             cloneEntry.tokens = new ArrayList<>();
@@ -163,5 +164,111 @@ public abstract class NgxAbstractEntry implements NgxEntry, Cloneable
             tokens.add(new NgxToken(val));
         }
     }
+
+
+    /**
+     * 再此节点之前添加
+     *
+     * @param entry
+     */
+    public void addBefore(NgxEntry entry)
+    {
+        addBeforeOrAfter(true, entry);
+    }
+
+    private void addBeforeOrAfter(boolean isBefore, NgxEntry entry)
+    {
+        NgxBlock parent = getParent();
+        if (parent == null)
+        {
+            throw new RuntimeException("not have parent");
+        }
+
+        List<NgxEntry> parentList = parent.entries;
+        for (int i = 0; i < parentList.size(); i++)
+        {
+            if (parentList.get(i) == this)
+            {
+                if (isBefore)
+                {
+                    parentList.add(i, entry);
+                } else
+                {
+                    parentList.add(i + 1, entry);
+                }
+                if (entry.getParent() != null)
+                {
+                    entry.removeSelf();
+                }
+                entry.setParent(parent);
+                break;
+            }
+        }
+    }
+
+
+    /**
+     * 再此节点之后添加
+     *
+     * @param entry
+     */
+    public void addAfter(NgxEntry entry)
+    {
+        addBeforeOrAfter(false, entry);
+    }
+
+    /**
+     * 获取之前的节点
+     *
+     * @return
+     */
+    public NgxEntry before()
+    {
+        return getBeforeOrAfter(true);
+    }
+
+    /**
+     * 获取之后的节点
+     *
+     * @return
+     */
+    public NgxEntry after()
+    {
+        return getBeforeOrAfter(false);
+    }
+
+    private NgxEntry getBeforeOrAfter(boolean isBefore)
+    {
+        NgxBlock parent = getParent();
+        if (parent == null)
+        {
+            throw new RuntimeException("not have parent");
+        }
+        NgxEntry ngxEntry = null;
+
+        List<NgxEntry> parentList = parent.entries;
+        for (int i = 0; i < parentList.size(); i++)
+        {
+            if (parentList.get(i) == this)
+            {
+                if (isBefore)
+                {
+                    if (i > 0)
+                    {
+                        ngxEntry = parentList.get(i - 1);
+                    }
+                } else
+                {
+                    if (i < parentList.size() - 1)
+                    {
+                        ngxEntry = parentList.get(i + 1);
+                    }
+                }
+                break;
+            }
+        }
+        return ngxEntry;
+    }
+
 
 }

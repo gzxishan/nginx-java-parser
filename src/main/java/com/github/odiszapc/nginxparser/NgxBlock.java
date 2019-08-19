@@ -26,7 +26,7 @@ import java.util.*;
  */
 public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
 {
-    private Collection<NgxEntry> entries = new ArrayList<NgxEntry>();
+    List<NgxEntry> entries = new ArrayList<NgxEntry>();
 
 
     @Override
@@ -41,9 +41,14 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
         return cloneBlock;
     }
 
-    public Collection<NgxEntry> getEntries()
+    /**
+     * 返回一个不可修改的List。
+     *
+     * @return
+     */
+    public List<NgxEntry> getEntries()
     {
-        return entries;
+        return Collections.unmodifiableList(entries);
     }
 
     public Collection<NgxBlock> getBlockEntries()
@@ -239,8 +244,19 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
     }
 
     /**
+     * 返回一个新的List。
+     *
+     * @return
+     */
+    public List<NgxEntry> children()
+    {
+        List<NgxEntry> list = new ArrayList<>(entries);
+        return list;
+    }
+
+    /**
      * @param clazz   支持:{@linkplain NgxParam NgxParam.class},{@linkplain NgxBlock NgxBlock.class},
-     * {@linkplain NgxComment NgxComment.class}
+     *                {@linkplain NgxComment NgxComment.class}
      * @param queries 另见{@linkplain Query#toQuery(Object[])}。
      * @param <T>
      * @return

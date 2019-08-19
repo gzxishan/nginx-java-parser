@@ -68,7 +68,24 @@ public class QueryTest extends ParseTestBase
                         )
                 )
         );
-        assertEquals(2,ngxBlocks.size());
+        assertEquals(2, ngxBlocks.size());
+
+        NgxBlock firstServer = ngxConfig.queryOneNgxBlock("http", "server");
+
+        NgxComment ngxComment = (NgxComment) firstServer.before();
+        assertEquals("gzip  on;", ngxComment.getValue().trim());
+
+        NgxBlock ngxBlock = (NgxBlock) firstServer.after();
+        assertEquals("server", ngxBlock.getName());
+
+        firstServer.addBefore(new NgxComment("before comment"));
+        firstServer.addAfter(new NgxComment("after comment"));
+
+        ngxComment = (NgxComment) firstServer.before();
+        assertEquals("before comment", ngxComment.getValue().trim());
+        ngxComment = (NgxComment) firstServer.after();
+        assertEquals("after comment", ngxComment.getValue().trim());
+
 
     }
 }

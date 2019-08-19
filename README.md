@@ -5,9 +5,9 @@ This library helps in analyzing Nginx web server configuration files, looking up
 
 ##
 # 版本
-当前最新版本为  [**1.0.12**](https://mvnrepository.com/artifact/com.xishankeji.forks/nginxparser)
+当前最新版本为  [**1.1.2**](https://mvnrepository.com/artifact/com.xishankeji.forks/nginxparser)
 
-![Version](https://img.shields.io/badge/Version-1.0.12-brightgreen.svg)
+![Version](https://img.shields.io/badge/Version-1.1.2-brightgreen.svg)
 ![License](http://img.shields.io/:License-Apache2.0-blue.svg)
 ![JDK 1.8](https://img.shields.io/badge/JDK-1.8-green.svg)
 
@@ -275,3 +275,9 @@ List<NgxBlock> ngxBlocks = ngxConfig.queryNgxBlock("http",
         )
 );
 ```
+
+### NgxEntry的before与after
+- before():获取之前的节点
+- after():获取之后的节点
+- addBefore():再此节点之前添加
+- addAfter():再此节点之后添加

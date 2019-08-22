@@ -279,5 +279,5 @@ List<NgxBlock> ngxBlocks = ngxConfig.queryNgxBlock("http",
 ### NgxEntry的before与after
 - before():获取之前的节点
 - after():获取之后的节点
-- addBefore():再此节点之前添加
-- addAfter():再此节点之后添加
+- addBefore():在此节点之前添加
+- addAfter():在此节点之后添加

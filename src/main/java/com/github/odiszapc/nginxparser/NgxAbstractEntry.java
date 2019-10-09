@@ -67,14 +67,16 @@ public abstract class NgxAbstractEntry implements NgxEntry, Cloneable
     }
 
     @Override
-    public void removeSelf()
+    public boolean removeSelf()
     {
         NgxBlock parent = getParent();
-        if (parent == null)
+        if (parent != null)
         {
-            throw new RuntimeException("not found parent");
+            return parent.remove(this);
+        } else
+        {
+            return false;
         }
-        parent.remove(this);
     }
 
     public Collection<NgxToken> getTokens()
@@ -107,8 +109,9 @@ public abstract class NgxAbstractEntry implements NgxEntry, Cloneable
     public String getName()
     {
         if (getTokens().isEmpty())
+        {
             return null;
-
+        }
         return getTokens().iterator().next().toString();
     }
 

@@ -87,10 +87,12 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
         return getEntries().iterator();
     }
 
-    public void remove(NgxEntry itemToRemove)
+    public boolean remove(NgxEntry itemToRemove)
     {
         if (null == itemToRemove)
+        {
             throw new NullPointerException("Item can not be null");
+        }
 
         Iterator<NgxEntry> it = entries.iterator();
         while (it.hasNext())
@@ -104,6 +106,7 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
                     {
                         it.remove();
                         itemToRemove.setParent(null);
+                        return true;
                     }
                     break;
                 case BLOCK:
@@ -111,14 +114,20 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
                     {
                         it.remove();
                         itemToRemove.setParent(null);
+                        return true;
                     } else
                     {
                         NgxBlock block = (NgxBlock) entry;
-                        block.remove(itemToRemove);//递归
+                        //递归
+                        if (block.remove(itemToRemove))
+                        {
+                            return true;
+                        }
                     }
                     break;
             }
         }
+        return false;
     }
 
     public void removeAll(Iterable<? extends NgxEntry> itemsToRemove)

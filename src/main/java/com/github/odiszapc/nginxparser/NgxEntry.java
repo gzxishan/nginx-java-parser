@@ -23,7 +23,7 @@ public interface NgxEntry
 
     void setParent(NgxBlock block);
 
-    void removeSelf();
+    boolean removeSelf();
 
     /**
      * @param parent 会将克隆的节点添加到parent

@@ -105,12 +105,12 @@ public interface Query
         @Override
         public boolean accept(NgxEntry entry)
         {
-            if (entry instanceof NgxParam)
+            if (entry instanceof NgxAbstractEntry)
             {
-                return ((NgxParam) entry).getName().equals(name);
+                return name.equals(((NgxAbstractEntry) entry).getName());
             } else
             {
-                return ((NgxBlock) entry).getName().equals(name);
+                return false;
             }
         }
 

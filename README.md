@@ -5,9 +5,9 @@ This library helps in analyzing Nginx web server configuration files, looking up
 
 ##
 # 版本
-当前最新版本为  [**1.1.2**](https://mvnrepository.com/artifact/com.xishankeji.forks/nginxparser)
+当前最新版本为  [**1.1.5**](https://mvnrepository.com/artifact/com.xishankeji.forks/nginxparser)
 
-![Version](https://img.shields.io/badge/Version-1.1.2-brightgreen.svg)
+![Version](https://img.shields.io/badge/Version-1.1.5-brightgreen.svg)
 ![License](http://img.shields.io/:License-Apache2.0-blue.svg)
 ![JDK 1.8](https://img.shields.io/badge/JDK-1.8-green.svg)
 
@@ -34,7 +34,7 @@ Add the following dependency to your POM:
 <dependency>
     <groupId>com.xishankeji.forks</groupId>
     <artifactId>nginxparser</artifactId>
-    <version>1.0.12</version>
+    <version>1.1.5</version>
 </dependency>
 ```
 

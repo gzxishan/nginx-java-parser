@@ -28,6 +28,11 @@ public class NgxParam extends NgxAbstractEntry {
         super();
     }
 
+    public NgxParam(String name)
+    {
+        super(name);
+    }
+
     public String toString() {
         String s = super.toString();
         if (s.isEmpty())

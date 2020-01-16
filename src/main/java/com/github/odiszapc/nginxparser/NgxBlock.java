@@ -29,6 +29,16 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
     List<NgxEntry> entries = new ArrayList<NgxEntry>();
 
 
+    public NgxBlock()
+    {
+        super();
+    }
+
+    public NgxBlock(String name)
+    {
+        super(name);
+    }
+
     @Override
     public NgxBlock cloneDeep(NgxBlock parent)
     {
@@ -72,6 +82,20 @@ public class NgxBlock extends NgxAbstractEntry implements Iterable<NgxEntry>
         }
         entry.setParent(this);
         entries.add(entry);
+    }
+
+    /**
+     * 添加到第一个位置。
+     * @param entry
+     */
+    public void addFirstEntry(NgxEntry entry)
+    {
+        if (entry.getParent() != null)
+        {
+            entry.removeSelf();
+        }
+        entry.setParent(this);
+        entries.add(0, entry);
     }
 
     @Override

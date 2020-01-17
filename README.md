@@ -34,7 +34,7 @@ Add the following dependency to your POM:
 <dependency>
     <groupId>com.xishankeji.forks</groupId>
     <artifactId>nginxparser</artifactId>
-    <version>1.1.5</version>
+    <version>1.1.6</version>
 </dependency>
 ```
 

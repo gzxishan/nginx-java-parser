@@ -58,16 +58,17 @@
 
 
 
+    <!--发布到私服-->
     <distributionManagement>
         <repository>
-            <id>releases</id>
+            <id>${repo.releases.id}</id>
             <name>Releases</name>
-            <url>https://m2.xishankeji.com/repository/maven-releases/</url>
+            <url>${repo.releases.url}</url>
         </repository>
         <snapshotRepository>
-            <id>snapshots</id>
+            <id>${repo.snapshots.id}</id>
             <name>Snapshots</name>
-            <url>https://m2.xishankeji.com/repository/maven-snapshots/</url>
+            <url>${repo.snapshots.url}</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -196,17 +197,21 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <executable>gpg</executable>
+                            <passphrase>${sonatype.gpg.passphrase}</passphrase>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
             <distributionManagement>
                 <snapshotRepository>
-                    <id>sonatype</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                    <id>${sonatype.id}</id>
+                    <url>${sonatype.snapshots.url}</url>
                 </snapshotRepository>
                 <repository>
-                    <id>sonatype</id>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                    <id>${sonatype.id}</id>
+                    <url>${sonatype.releases.url}</url>
                 </repository>
             </distributionManagement>
         </profile>

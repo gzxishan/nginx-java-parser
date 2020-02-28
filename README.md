@@ -5,7 +5,7 @@ This library helps in analyzing Nginx web server configuration files, looking up
 
 ##
 # 版本
-当前最新版本为  [**1.1.5**](https://mvnrepository.com/artifact/com.xishankeji.forks/nginxparser)
+当前最新版本为  [**1.1.6**](https://mvnrepository.com/artifact/com.xishankeji.forks/nginxparser)
 
 ![Version](https://img.shields.io/badge/Version-1.1.5-brightgreen.svg)
 ![License](http://img.shields.io/:License-Apache2.0-blue.svg)
